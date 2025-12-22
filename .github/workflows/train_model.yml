@@ -36,11 +36,13 @@ jobs:
         # Buat environment dari file YAML
         conda env create -f MLProject/conda.yaml
         
+    # Langkah 4 di train_model.yml
     - name: 4. Run MLflow Project (Model Retraining)
       shell: bash
-      # Jalankan MLflow Project yang sudah kita definisikan
       run: |
-        # Aktifkan environment yang sudah dibuat
+        # PASTIKAN ENVIRONMENT AKTIF SECARA EKSPLISIT
+        source $(conda info --base)/etc/profile.d/conda.sh
         conda activate ci_env
-        # Jalankan MLflow Project. Titik 'MLProject/' mengacu pada folder yang berisi file MLProject
+        
+        # Jalankan MLflow Project
         mlflow run MLProject/ -e main
