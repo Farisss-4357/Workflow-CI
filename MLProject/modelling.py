@@ -10,8 +10,9 @@ import os
 # Script ini akan memuat TRAIN_DATA.CSV dan TEST_DATA.CSV dari folder Anda.
 
 # Susun Path Lengkap untuk file Train dan Test
-TRAIN_FILE = os.path.join("train_data.csv")
-TEST_FILE = os.path.join("test_data.csv")
+# Karena data berada di folder MLProject/, kita harus menunjuk ke sana.
+TRAIN_FILE = os.path.join("MLProject", "train_data.csv")
+TEST_FILE = os.path.join("MLProject", "test_data.csv")
 # =========================================================================
 TARGET_COLUMN = "species"
 # --- Setup MLflow ---
