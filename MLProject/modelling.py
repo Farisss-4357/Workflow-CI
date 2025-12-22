@@ -7,12 +7,10 @@ import os
 
 # =========================================================================
 # === KONFIGURASI PATH (WAJIB DISESUAIKAN) ===
-# Script ini akan memuat TRAIN_DATA.CSV dan TEST_DATA.CSV dari folder Anda.
 
-# Susun Path Lengkap untuk file Train dan Test
-# Karena data berada di folder MLProject/, kita harus menunjuk ke sana.
-TRAIN_FILE = os.path.join("train_data.csv")
-TEST_FILE = os.path.join("test_data.csv")
+# Koreksi Path Data: Harus menunjuk ke folder MLProject/
+TRAIN_FILE = os.path.join("MLProject", "train_data.csv") 
+TEST_FILE = os.path.join("MLProject", "test_data.csv")
 # =========================================================================
 TARGET_COLUMN = "species"
 # --- Setup MLflow ---
@@ -52,34 +50,32 @@ def train_model_basic():
     if X_train is None:
         return
 
-    # Memulai Run MLflow
-    # Semua yang ada di dalam blok 'with' akan dicatat oleh Autolog
-    with mlflow.start_run(run_name="Logistic_Regression_Basic_Split"):
-        
-        # 1. Inisialisasi Model dan Hyperparameter
-        # Parameter ini akan otomatis dicatat oleh Autolog
-        model = LogisticRegression(
-            solver='liblinear',
-            max_iter=500,
-            random_state=42
-        )
-        
-        # 2. Melatih Model (model.fit)
-        print("\nMemulai pelatihan model...")
-        model.fit(X_train, y_train)
-        print("Pelatihan model selesai. Detail dicatat oleh MLflow.")
+    # HAPUS: Blok with mlflow.start_run() DIHAPUS karena konflik dengan 'mlflow run' CLI.
+    
+    # 1. Inisialisasi Model dan Hyperparameter
+    # Parameter ini akan otomatis dicatat oleh Autolog
+    model = LogisticRegression(
+        solver='liblinear',
+        max_iter=500,
+        random_state=42
+    )
+    
+    # 2. Melatih Model (model.fit)
+    print("\nMemulai pelatihan model...")
+    model.fit(X_train, y_train)
+    print("Pelatihan model selesai. Detail dicatat oleh MLflow.")
 
-        # 3. Evaluasi dan Verifikasi
-        y_pred = model.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        
-        # Autologging sudah mencatat metrik standar. Kita bisa catat metrik kustom jika perlu.
-        mlflow.log_metric("final_test_accuracy", acc)
-        print(f"Final Test Accuracy (Metrik Kustom): {acc:.4f}")
-        
-        print("\n---------------------------------------------------------")
-        print("Verifikasi di MLflow UI untuk melihat Model, Params, dan Metrics.")
-        print("---------------------------------------------------------")
+    # 3. Evaluasi dan Verifikasi
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    
+    # Catat metrik kustom
+    mlflow.log_metric("final_test_accuracy", acc)
+    print(f"Final Test Accuracy (Metrik Kustom): {acc:.4f}")
+    
+    print("\n---------------------------------------------------------")
+    print("Verifikasi di MLflow UI untuk melihat Model, Params, dan Metrics.")
+    print("---------------------------------------------------------")
 
 
 if __name__ == "__main__":
