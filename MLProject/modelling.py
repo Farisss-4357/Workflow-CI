@@ -6,27 +6,28 @@ import mlflow.sklearn
 import os
 
 # =========================================================================
-# === KONFIGURASI PATH: KOREKSI MUTLAK UNTUK CI/MLFLOW RUN ===
-# Harus menunjuk ke folder MLProject/
-TRAIN_FILE = os.path.join("MLProject", "train_data.csv") 
-TEST_FILE = os.path.join("MLProject", "test_data.csv")
+# === KONFIGURASI PATH (KOREKSI MUTLAK) ===
+# Path dikembalikan ke NAMA FILE SAJA. 
+# Ini karena perintah 'mlflow run MLProject/' membuat direktori kerja berada di dalam MLProject/.
+TRAIN_FILE = os.path.join("train_data.csv")
+TEST_FILE = os.path.join("test_data.csv")
 # =========================================================================
 
 TARGET_COLUMN = "species"
-# --- Setup MLflow ---
-mlflow.set_experiment("Kriteria 2 - Modeling Basic (Autolog)")
-mlflow.sklearn.autolog() # Aktifkan Autologging
+
+mlflow.sklearn.autolog() # Autologging tetap dipertahankan
 
 def load_data():
     """Memuat data training dan testing yang sudah dipisahkan."""
     try:
-        # Catatan: Sekarang ini akan mencoba memuat dari MLProject/train_data.csv
         print(f"Mencoba memuat data latih dari: {TRAIN_FILE}")
         train_df = pd.read_csv(TRAIN_FILE)
         test_df = pd.read_csv(TEST_FILE)
-        # ... (Kode pemisahan X dan y)
+
+        # Pisahkan fitur (X) dan target (y)
         X_train = train_df.drop(TARGET_COLUMN, axis=1)
         y_train = train_df[TARGET_COLUMN]
+        
         X_test = test_df.drop(TARGET_COLUMN, axis=1)
         y_test = test_df[TARGET_COLUMN]
         
@@ -48,10 +49,6 @@ def train_model_basic():
     
     if X_train is None:
         return
-
-    # BLOK 'with mlflow.start_run()' DIHAPUS
-    # Karena 'mlflow run' CLI sudah memulai MLflow run
-    
     # 1. Inisialisasi Model dan Hyperparameter
     model = LogisticRegression(
         solver='liblinear',
@@ -72,7 +69,10 @@ def train_model_basic():
     mlflow.log_metric("final_test_accuracy", acc)
     print(f"Final Test Accuracy (Metrik Kustom): {acc:.4f}")
     
-    # ... (Pesan Verifikasi)
+    print("\n---------------------------------------------------------")
+    print("Verifikasi di MLflow UI untuk melihat Model, Params, dan Metrics.")
+    print("---------------------------------------------------------")
+
 
 if __name__ == "__main__":
     train_model_basic()
