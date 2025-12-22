@@ -9,8 +9,8 @@ import os
 # === KONFIGURASI PATH (WAJIB DISESUAIKAN) ===
 
 # Koreksi Path Data: Harus menunjuk ke folder MLProject/
-TRAIN_FILE = os.path.join("MLProject", "train_data.csv") 
-TEST_FILE = os.path.join("MLProject", "test_data.csv")
+TRAIN_FILE = os.path.join("train_data.csv") 
+TEST_FILE = os.path.join("test_data.csv")
 # =========================================================================
 TARGET_COLUMN = "species"
 # --- Setup MLflow ---
