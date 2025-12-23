@@ -10,4 +10,4 @@ dependencies:
     - pandas
     - scikit-learn
     - numpy
-    - scipy   # <== TAMBAHKAN INI (Sering dibutuhkan oleh solver sklearn)
+    - scipy   
