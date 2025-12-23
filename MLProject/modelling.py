@@ -6,8 +6,6 @@ import mlflow.sklearn
 import os
 
 # =========================================================================
-# === KONFIGURASI PATH (KOREKSI MUTLAK) ===
-# Path dikembalikan ke NAMA FILE SAJA. 
 # Ini karena perintah 'mlflow run MLProject/' membuat direktori kerja berada di dalam MLProject/.
 TRAIN_FILE = os.path.join("train_data.csv")
 TEST_FILE = os.path.join("test_data.csv")
@@ -49,12 +47,14 @@ def train_model_basic():
     
     if X_train is None:
         return
+
     # 1. Inisialisasi Model dan Hyperparameter
-model = LogisticRegression(
-    solver='lbfgs', 
-    max_iter=500,
-    random_state=42
-)
+    model = LogisticRegression(
+        solver='lbfgs', 
+        max_iter=500,
+        random_state=42
+    )
+    
     # 2. Melatih Model (model.fit)
     print("\nMemulai pelatihan model...")
     model.fit(X_train, y_train)
@@ -71,7 +71,6 @@ model = LogisticRegression(
     print("\n---------------------------------------------------------")
     print("Verifikasi di MLflow UI untuk melihat Model, Params, dan Metrics.")
     print("---------------------------------------------------------")
-
-
+    
 if __name__ == "__main__":
     train_model_basic()
