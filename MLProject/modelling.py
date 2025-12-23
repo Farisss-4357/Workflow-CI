@@ -50,12 +50,11 @@ def train_model_basic():
     if X_train is None:
         return
     # 1. Inisialisasi Model dan Hyperparameter
-    model = LogisticRegression(
-        solver='liblinear',
-        max_iter=500,
-        random_state=42
-    )
-    
+model = LogisticRegression(
+    solver='lbfgs', 
+    max_iter=500,
+    random_state=42
+)
     # 2. Melatih Model (model.fit)
     print("\nMemulai pelatihan model...")
     model.fit(X_train, y_train)
