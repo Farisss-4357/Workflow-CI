@@ -1,6 +1,4 @@
-name: churn-training
-
-python_env: python_env.yaml
+name: telecom-churn-mlflow
 
 entry_points:
   main:
