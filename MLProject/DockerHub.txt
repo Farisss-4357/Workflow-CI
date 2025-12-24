@@ -1,0 +1,1 @@
+https://hub.docker.com/r/faris4357/mlflow-model-ci

@@ -1,8 +1,7 @@
-name: Workflow-CI
+name: telecom-churn-ci
 
 conda_env: conda.yaml
 
 entry_points:
   main:
-    # Perintah ini akan menjalankan modelling.py
     command: "python modelling.py"
