@@ -57,21 +57,16 @@ def train_model():
     f1 = f1_score(y_test, y_pred)
 
     # ===============================
-    # LOGGING (TANPA start_run)
-    # ===============================
-    mlflow.log_param("model_type", "LogisticRegression")
-    mlflow.log_param("solver", "lbfgs")
-    mlflow.log_param("max_iter", 1000)
+    with mlflow.start_run():
+        mlflow.log_param("model_type", "LogisticRegression")
+        mlflow.log_param("solver", "lbfgs")
+        mlflow.log_param("max_iter", 1000)
 
-    mlflow.log_metric("accuracy", acc)
-    mlflow.log_metric("precision", prec)
-    mlflow.log_metric("recall", rec)
-    mlflow.log_metric("f1_score", f1)
+        mlflow.log_metric("accuracy", acc)
+        mlflow.log_metric("precision", prec)
+        mlflow.log_metric("recall", rec)
+        mlflow.log_metric("f1_score", f1)
 
-    mlflow.sklearn.log_model(
-        model,
-        artifact_path="model"
-    )
 
     print("✅ Training selesai")
     print(f"Accuracy : {acc:.4f}")

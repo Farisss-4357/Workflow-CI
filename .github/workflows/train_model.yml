@@ -1,48 +1,29 @@
-name: Continuous Integration - Model Training
+name: Train ML Model with MLflow Project
 
-# Tentukan pemicu (trigger): Model akan dilatih ulang setiap kali ada perubahan
-# yang didorong (push) ke branch 'main'.
 on:
   push:
     branches:
-      - main 
+      - main
+  workflow_dispatch:
 
-# Definisikan pekerjaan (job)
 jobs:
-  train_model:
-    # Tentukan sistem operasi (runner) yang akan menjalankan tugas
+  train-model:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 1. Checkout Code
-      # Mengambil kode dari repositori GitHub
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: 2. Setup Conda Environment
-      # Menginstal dan menyiapkan Conda/Miniconda pada runner GitHub
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        auto-update-conda: true
-        python-version: 3.12.7 # PASTIKAN SAMA dengan di conda.yaml
-        activate-environment: ci_env # Nama environment dari conda.yaml
-        
-    - name: 3. Install Dependencies
-      shell: bash
-      # Perintah untuk membuat dan mengaktifkan environment berdasarkan conda.yaml
-      run: |
-        # Inisialisasi Conda
-        conda init bash
-        source ~/.bashrc
-        # Buat environment dari file YAML
-        conda env create -f MLProject/conda.yaml
-        
-    # Langkah 4 di train_model.yml
-    - name: 4. Run MLflow Project (Model Retraining)
-      shell: bash
-      run: |
-        # PASTIKAN ENVIRONMENT AKTIF SECARA EKSPLISIT
-        source $(conda info --base)/etc/profile.d/conda.sh
-        conda activate ci_env
-        
-        # Jalankan MLflow Project
-        mlflow run MLProject/ -e main
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install MLflow
+        run: |
+          pip install mlflow==2.19.0
+
+      - name: Run MLflow Project
+        working-directory: MLProject
+        run: |
+          mlflow run .
