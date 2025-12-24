@@ -12,9 +12,8 @@ from sklearn.metrics import (
 )
 
 # ===============================
-# CONFIG
-# ===============================
-DATA_PATH = "telecom_churn_preprocessing.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, "telecom_churn_preprocessing.csv")
 TARGET_COL = "Churn"
 
 # ===============================
