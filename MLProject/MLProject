@@ -1,6 +1,6 @@
-name: telecom-churn-ci
+name: churn-training
 
-conda_env: conda.yaml
+python_env: python_env.yaml
 
 entry_points:
   main:

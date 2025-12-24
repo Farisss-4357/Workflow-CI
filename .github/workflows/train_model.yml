@@ -19,11 +19,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install MLflow
+      - name: Install dependencies
         run: |
-          pip install mlflow==2.19.0
+          pip install mlflow==2.19.0 pandas scikit-learn numpy
 
-      - name: Run MLflow Project
-        working-directory: MLProject
+      - name: Run training script
         run: |
-          mlflow run .
+          python MLProject/modelling.py
