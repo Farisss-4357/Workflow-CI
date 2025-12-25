@@ -8,13 +8,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 # =========================
-# FORCE LOCAL MLFLOW (AMAN CI)
+# FORCE LOCAL TRACKING
 # =========================
 mlflow.set_tracking_uri("file:./mlruns")
 mlflow.set_experiment("telecom-churn-experiment")
 
 # =========================
-# PATH CONFIG (RELATIVE ONLY)
+# PATH CONFIG
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, "telecom_churn_preprocessing.csv")
@@ -36,25 +36,25 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # =========================
-# TRAIN + LOGGING
+# TRAIN MODEL
 # =========================
-with mlflow.start_run():
-    model = RandomForestClassifier(
-        n_estimators=100,
-        random_state=42
-    )
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
 
-    model.fit(X_train, y_train)
+model.fit(X_train, y_train)
 
-    y_pred = model.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
+y_pred = model.predict(X_test)
+acc = accuracy_score(y_test, y_pred)
 
-    # LOG PARAM & METRIC
-    mlflow.log_param("model_type", "RandomForest")
-    mlflow.log_param("n_estimators", 100)
-    mlflow.log_metric("accuracy", acc)
+# =========================
+# LOGGING (PAKAI ACTIVE RUN)
+# =========================
+mlflow.log_param("model_type", "RandomForest")
+mlflow.log_param("n_estimators", 100)
+mlflow.log_metric("accuracy", acc)
 
-    # LOG MODEL
-    mlflow.sklearn.log_model(model, "model")
+mlflow.sklearn.log_model(model, "model")
 
-    print(f"Accuracy: {acc:.4f}")
+print(f"Accuracy: {acc:.4f}")
