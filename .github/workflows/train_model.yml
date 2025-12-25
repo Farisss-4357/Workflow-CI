@@ -1,28 +1,65 @@
-name: Train ML Model with MLflow Project
+name: CI/CD MLflow Docker
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [main]
+
+env:
+  CSV_URL: "MLProject/train_pca.csv"
+  TARGET_VAR: "Credit_Score"
+  MLFLOW_TRACKING_URI: "https://dagshub.com/<USERNAME>/<REPO>.mlflow"
+  MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+  MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
 
 jobs:
-  train-model:
+  train-and-dockerize:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install MLflow
+      - name: Install dependencies
         run: |
           pip install mlflow==2.19.0
 
+      # =========================
+      # TRAIN VIA MLFLOW PROJECT
+      # =========================
       - name: Run MLflow Project
         run: |
-          mlflow run .
+          mlflow run MLProject --env-manager=local
+
+      # =========================
+      # GET RUN ID
+      # =========================
+      - name: Get latest run_id
+        run: |
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+
+      # =========================
+      # BUILD DOCKER MODEL
+      # =========================
+      - name: Build Docker Image
+        run: |
+          mlflow models build-docker \
+            --model-uri "runs:/$RUN_ID/model" \
+            --name credit-score-model
+
+      # =========================
+      # PUSH TO DOCKER HUB
+      # =========================
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Push Docker Image
+        run: |
+          docker tag credit-score-model ${{ secrets.DOCKER_HUB_USERNAME }}/credit-score-model:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/credit-score-model:latest

@@ -1,0 +1,13 @@
+name: credit-scoring-project
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      csv_url: {type: str, default: "train_pca.csv"}
+      target_var: {type: str, default: "Credit_Score"}
+    command: >
+      python modelling.py
+      --csv_url {csv_url}
+      --target_var {target_var}
