@@ -57,5 +57,5 @@ with mlflow.start_run():
         artifact_path="model",
         registered_model_name="CreditScoringModel"
     )
-
+#
     print(f"Accuracy: {acc}")
