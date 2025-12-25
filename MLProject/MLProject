@@ -2,5 +2,4 @@ name: telecom-churn-project
 
 entry_points:
   main:
-    command: >
-      python modelling.py
+    command: "python modelling.py"

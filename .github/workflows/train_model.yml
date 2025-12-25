@@ -21,14 +21,6 @@ jobs:
           pip install mlflow==2.19.0 pandas scikit-learn
 
       # =========================
-      # PREPARE WORKSPACE
-      # =========================
-      - name: Prepare MLflow workspace
-        run: |
-          mkdir -p mlruns
-          ls -la
-
-      # =========================
       # RUN MLFLOW PROJECT
       # =========================
       - name: Run MLflow Project
@@ -36,13 +28,12 @@ jobs:
           mlflow run MLProject --env-manager=local
 
       # =========================
-      # GET RUN ID (ROBUST)
+      # GET RUN ID
       # =========================
       - name: Get latest run_id
         run: |
-          RUN_ID=$(ls -td mlruns/*/* | head -n 1 | awk -F'/' '{print $(NF)}')
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "Run ID: $RUN_ID"
 
       # =========================
       # BUILD DOCKER IMAGE
@@ -54,7 +45,7 @@ jobs:
             --name telecom-churn-model
 
       # =========================
-      # PUSH TO DOCKER HUB
+      # PUSH DOCKER IMAGE
       # =========================
       - name: Login Docker Hub
         uses: docker/login-action@v3

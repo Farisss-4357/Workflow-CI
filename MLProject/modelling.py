@@ -8,12 +8,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 # =========================
-# FORCE LOCAL TRACKING
-# =========================
-mlflow.set_tracking_uri("file:./mlruns")
-mlflow.set_experiment("telecom-churn-experiment")
-
-# =========================
 # PATH CONFIG
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -36,7 +30,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # =========================
-# TRAIN MODEL
+# TRAINING
 # =========================
 model = RandomForestClassifier(
     n_estimators=100,
@@ -49,12 +43,12 @@ y_pred = model.predict(X_test)
 acc = accuracy_score(y_test, y_pred)
 
 # =========================
-# LOGGING (PAKAI ACTIVE RUN)
+# LOGGING (AUTO RUN DARI MLFLOW PROJECT)
 # =========================
 mlflow.log_param("model_type", "RandomForest")
 mlflow.log_param("n_estimators", 100)
 mlflow.log_metric("accuracy", acc)
 
-mlflow.sklearn.log_model(model, "model")
+mlflow.sklearn.log_model(model, artifact_path="model")
 
 print(f"Accuracy: {acc:.4f}")
