@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/ASUS/Downloads/Workflow-CI/mlruns/0/96f44079c83c402a98c61cab8fd69d3c/artifacts
+end_time: 1766626411695
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 96f44079c83c402a98c61cab8fd69d3c
+run_name: whimsical-seal-729
+run_uuid: 96f44079c83c402a98c61cab8fd69d3c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766626382237
+status: 3
+tags: []
+user_id: ASUS

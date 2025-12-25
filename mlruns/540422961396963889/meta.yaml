@@ -1,0 +1,6 @@
+artifact_location: file:///C:/Users/ASUS/Downloads/Workflow-CI/mlruns/540422961396963889
+creation_time: 1766625800910
+experiment_id: '540422961396963889'
+last_update_time: 1766625800910
+lifecycle_stage: active
+name: telecom_churn_model
